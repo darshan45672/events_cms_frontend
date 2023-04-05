@@ -65,7 +65,7 @@ const registration = () => (
       }
 
       .form-container {
-        width: 400px;
+        width: 1000px;
         background-color: #fff;
         padding: 40px;
         border-radius: 4px;
@@ -75,6 +75,7 @@ const registration = () => (
       .title {
         font-size: 24px;
         margin-bottom: 32px;
+        text-align: center;
       }
 
       .form {

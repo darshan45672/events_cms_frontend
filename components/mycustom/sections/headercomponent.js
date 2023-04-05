@@ -114,6 +114,11 @@ const HeaderComponent = () => {
                     Sign In
                   </a>
                 </NavItem>
+                <NavItem>
+                  <a className="btn btn-danger m-r-20 " href="/profile">
+                    Profile
+                  </a>
+                </NavItem>
               </Nav>
             </Collapse>
           </Navbar>

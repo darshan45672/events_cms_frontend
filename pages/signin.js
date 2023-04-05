@@ -20,7 +20,7 @@ const SignIn = () => (
         </div>
       </form>
       <div className="signup">
-        Don't have an account? <a href="#">Sign up</a>
+        Don't have an account? <a href="/registration">Sign up</a>
       </div>
     </div>
     <style jsx>{`
@@ -47,7 +47,8 @@ const SignIn = () => (
       }
 
       .content {
-        max-width: 800px;
+        max-width: 1200px;
+        width: 1000px;
         padding: 20px;
         background-color: #f8f8f8;
         border-radius: 10px;

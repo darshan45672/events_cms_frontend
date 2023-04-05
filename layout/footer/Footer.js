@@ -15,8 +15,8 @@ const Footer = () => {
           <Col lg="3" md="6" className="m-b-30">
             <h5 className="m-b-20">Phone</h5>
             <p>
-              Reception : +205 123 4567 <br />
-              Office : +207 235 7890
+              Reception : +91 9741731309 <br />
+              Office : +91 9945130850
             </p>
           </Col>
           <Col lg="3" md="6" className="m-b-30">
@@ -24,12 +24,12 @@ const Footer = () => {
             <p>
               Office :
               <Link href="#">
-                <a className="link">info@wrappixel.com</a>
+                <a className="link">info@Mite.Ac.in</a>
               </Link>
               <br />
               Site :
-              <Link href="https://www.wrappixel.com">
-                <a className="link">wrappixel.com</a>
+              <Link href="https://mite.ac.in">
+                <a className="link">mite.ac.in</a>
               </Link>
             </p>
           </Col>
