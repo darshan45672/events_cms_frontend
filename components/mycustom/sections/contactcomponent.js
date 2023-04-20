@@ -72,14 +72,14 @@ const ContactComponent = () => {
                 </Col>
                 <Col lg="4">
                   <div className="detail-box p-40 bg-info">
-                    <h2 className="text-white">Wrappixel Headquarters</h2>
+                    <h2 className="text-white">MITE</h2>
                     <p className="text-white m-t-30 op-8">
-                      251 546 9442
-                      <br /> info@wrappixel.com
+                    082582 62695
+                      <br /> info@mite.co.in
                     </p>
                     <p className="text-white op-8">
-                      601 Sherwood Ave.
-                      <br /> San Bernandino, CA 92404
+                    Badaga Mijar, Solapur
+                      <br /> Mangalore Highway, Near Moodabidre, Mangaluru, Karnataka 574225
                     </p>
                   </div>
                 </Col>

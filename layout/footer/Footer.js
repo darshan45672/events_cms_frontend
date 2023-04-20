@@ -10,13 +10,12 @@ const Footer = () => {
         <Row>
           <Col lg="3" md="6" className="m-b-30">
             <h5 className="m-b-20">Address</h5>
-            <p>71 Amsteroum Avenue Cronish Night, NY 35098</p>
+            <p> Badaga Mijar, Solapur - Mangalore Highway, Near Moodabidre, Mangaluru, Karnataka 574225</p>
           </Col>
           <Col lg="3" md="6" className="m-b-30">
             <h5 className="m-b-20">Phone</h5>
             <p>
-              Reception : +205 123 4567 <br />
-              Office : +207 235 7890
+              Office : 082582 62695
             </p>
           </Col>
           <Col lg="3" md="6" className="m-b-30">
@@ -24,12 +23,12 @@ const Footer = () => {
             <p>
               Office :
               <Link href="#">
-                <a className="link">info@wrappixel.com</a>
+                <a className="link">info@mite.ac.in </a>
               </Link>
               <br />
               Site :
-              <Link href="https://www.wrappixel.com">
-                <a className="link">wrappixel.com</a>
+              <Link href="https://mite.ac.in/">
+                <a className="link"> mite.ac.in</a>
               </Link>
             </p>
           </Col>
@@ -70,20 +69,18 @@ const Footer = () => {
               <div className="d-flex font-14">
                 <div className="m-t-10 m-b-10 copyright">
                   All Rights Reserved by{" "}
-                  <Link href="https://www.wrappixel.com">
-                    <a className="link">wrappixel.com</a>
+                  <Link href="https://mite.ac.in/">
+                    <a className="link">MITE</a>
                   </Link>
                 </div>
                 <div className="links ml-auto m-t-10 m-b-10">
-                  <Link href="#">
-                    <a className="p-10 p-l-0">Terms of Use</a>
+                  <Link href="/about">
+                    <a className="p-10 p-l-0">About</a>
                   </Link>
-                  <Link href="#">
-                    <a className="p-10">Legal Disclaimer</a>
+                  <Link href="/events">
+                    <a className="p-10">Events</a>
                   </Link>
-                  <Link href="#">
-                    <a className="p-10">Privacy Policy</a>
-                  </Link>
+               
                 </div>
               </div>
             </Col>

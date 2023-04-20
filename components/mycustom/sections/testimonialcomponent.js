@@ -27,7 +27,7 @@ const TestimonialComponent = () => {
         <Container>
           <Row className="justify-content-center">
             <Col md="7" className="text-center">
-              <h2 className="title">Check what our Customers are Saying</h2>
+              <h2 className="title">Student Feedback</h2>
               <h6 className="subtitle">
                 You can relay on our amazing features list and also our customer
                 services will be great experience for you without doubt and in

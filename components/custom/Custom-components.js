@@ -19,7 +19,7 @@ import CallToAction from "../../components/call-to-action/CallToAction";
 
 const CustomComponents = () => {
   return (
-    <div>
+    <>
       <Banner2 />
       <HeaderComponent />
       <BannerComponent />
@@ -33,7 +33,7 @@ const CustomComponents = () => {
       <C2aComponent />
       <ContactComponent />
       <CallToAction />
-    </div>
+    </>
   );
 };
 

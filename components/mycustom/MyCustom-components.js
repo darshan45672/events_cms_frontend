@@ -8,7 +8,7 @@ import HeaderComponent from "./sections/headercomponent";
 import BannerComponent from "./sections/bannercomponent";
 import FormBannerComponent from "./sections/formbannercomponent";
 import FeatureComponent from "./sections/featurecomponent";
-import PortfolioComponent from "./sections/portfoliocomponent";
+import EventComponent from "./sections/EventComponent";
 import PricingComponent from "./sections/pricingcomponent";
 import TeamComponent from "./sections/teamcomponent";
 import TestimonialComponent from "./sections/testimonialcomponent";
@@ -19,14 +19,14 @@ import CallToAction from "../../components/call-to-action/CallToAction";
 
 const CustomComponents = () => {
   return (
-    <div>
+    <>
       
       <Banner2 />
-      <PortfolioComponent/>
+      <EventComponent/>
       <TestimonialComponent/>
       <ContactComponent/>
       
-    </div>
+    </>
   );
 };
 

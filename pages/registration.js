@@ -1,140 +1,135 @@
 import Link from "next/link";
 
-const registration = () => (
-  <div className="container">
-    <div className="form-container">
-      <h1 className="title">Registration</h1>
-      <form className="form">
-        <div className="input-container">
-          <label className="label" htmlFor="name">
-            Name
-          </label>
-          <input className="input" type="text" id="name" name="name" required />
+import { Row, Col, Container, Card, CardBody,Spinner,Input } from "reactstrap";
+
+import { useQuery, gql } from "@apollo/client";
+
+import {signup} from './api/api'
+
+import React, { useState } from 'react';
+
+const BRANCHES_QUERY = gql`
+{
+  branches{
+     name
+     id
+   }
+ }
+`;
+
+const Registration = () => {
+
+  const { data, loading, error } = useQuery(BRANCHES_QUERY);
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [usn, setUsn] = useState("");
+  const [branch, setBranch] = useState("");
+
+  if (loading) return (
+      <Row className="justify-content-center">
+      <Col md="7" className="text-center mt-4">
+      <Spinner animation="border" variant="primary" />
+      </Col>
+    </Row>
+
+  );
+  if (error) return <pre>{error.message}</pre>
+
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const form = 
+    {  
+      username: username,
+      password: password,
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      usn: usn,
+      branch: {
+        id: branch
+      },
+      "roles": ["user"],
+    }
+    console.log(form);
+    signup(form).then((res) => {
+      console.log(res);
+    })
+  }
+ 
+
+  return (
+    <div className='container mt-4'>
+    <div className='row mt-4'>
+      <div className='col-md-3'></div>
+      <div className='col-md-6'>
+       
+        <div className='card shadow p-4'>
+            <form onSubmit={handleSubmit}>
+            <h4 className="text-center">Register</h4>
+  <div class="form-outline mb-4">
+    <input type="text" id="form2Example1" class="form-control" onChange={(e) => setUsername(e.target.value)}/>
+    <label class="form-label" for="form2Example1">Username</label>
+  </div>
+  <div class="form-outline mb-4">
+    <input type="text" id="form2Example1" class="form-control" onChange={(e) => setFirstName(e.target.value)} />
+    <label class="form-label" for="form2Example1">First Name</label>
+  </div>
+  <div class="form-outline mb-4">
+    <input type="text" id="form2Example1" class="form-control" onChange={(e) => setLastName(e.target.value)}/>
+    <label class="form-label" for="form2Example1">Last Name</label>
+  </div>
+  <div class="form-outline mb-4">
+    <input type="text" id="form2Example1" class="form-control" onChange={(e) => setUsn(e.target.value)}/>
+    <label class="form-label" for="form2Example1">USN</label>
+  </div>
+  <div class="form-outline mb-4">
+    <input type="email" id="form2Example1" class="form-control" onChange={(e) => setEmail(e.target.value)}/>
+    <label class="form-label" for="form2Example1">Email address</label>
+  </div>
+  <div class="form-outline mb-4">
+ 
+          <Input type="select" name="select" id="exampleSelect" onChange={(e) => setBranch(e.target.value)}>
+          {
+            data.branches.map((branch) => (
+              <option value={branch.id}>{branch.name}</option>
+            ))
+          }
+          </Input>
+    <label class="form-label" for="form2Example1">Select Your Branch</label>
+  </div>
+
+
+  <div class="form-outline mb-4">
+    <input type="password" id="form2Example2" class="form-control" onChange={(e) => setPassword(e.target.value)}/>
+    <label class="form-label" for="form2Example2">Password</label>
+  </div>
+
+
+
+
+  <button type="submit" class="btn btn-info btn-block mb-4" >Create Account</button>
+
+
+  <div class="text-center">
+  <Link href={`/login`}>
+      <p>Already a member? <a href="#!">Login</a></p>
+  </Link>
+
+
+  </div>
+          </form>
         </div>
-        <div className="input-container">
-          <label className="label" htmlFor="email">
-            Email
-          </label>
-          <input className="input" type="email" id="email" name="email" required />
-        </div>
-        <div className="input-container">
-          <label className="label" htmlFor="password">
-            Password
-          </label>
-          <input
-            className="input"
-            type="password"
-            id="password"
-            name="password"
-            required
-          />
-        </div>
-        <div className="input-container">
-          <label className="label" htmlFor="confirmPassword">
-            Confirm Password
-          </label>
-          <input
-            className="input"
-            type="password"
-            id="confirmPassword"
-            name="confirmPassword"
-            required
-          />
-        </div>
-        <button className="button" type="submit">
-          Sign Up
-        </button>
-      </form>
-      <div className="signup">
-        <p>Already have an account?</p>
-        <Link href="/signin">
-          <a>Sign In</a>
-        </Link>
+          
       </div>
-    </div>
-    <style jsx>{`
-      .container {
-        height: 130vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-image: url("/background.jpg");
-        background-size: cover;
-        backdrop-filter: blur(5px);
-        padding-top:60px;
-      }
-
-      .form-container {
-        width: 400px;
-        background-color: #fff;
-        padding: 40px;
-        border-radius: 4px;
-        box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.1);
-      }
-
-      .title {
-        font-size: 24px;
-        margin-bottom: 32px;
-      }
-
-      .form {
-        display: flex;
-        flex-direction: column;
-      }
-
-      .input-container {
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 16px;
-      }
-
-      .label {
-        font-size: 14px;
-        margin-bottom: 8px;
-        color: black;
-      }
-
-      .input {
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        padding: 12px 16px;
-      }
-
-      .button {
-        background-color: #0070f3;
-        color: #fff;
-        border: none;
-        border-radius: 4px;
-        padding: 12px 16px;
-        cursor: pointer;
-        transition: background-color 0.2s;
-      }
-
-      .button:hover {
-        background-color: #0062cc;
-      }
-
-      .signup {
-        display: flex;
-        align-items: center;
-        margin-top: 16px;
-      }
-
-      .signup p {
-        font-size: 14px;
-        margin-right: 8px;
-      }
-
-      .signup a {
-        color: #0070f3;
-        text-decoration: none;
-        transition: color 0.2s;
-      }
-    
-      .signup a:hover {
-        color: #0048b7;
-      }
-    `}</style>
+      <div className='col-md-3'></div>
       </div>
-    );
-    export default registration;
+  </div>
+  );
+};
+
+export default Registration;
