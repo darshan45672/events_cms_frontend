@@ -1,7 +1,108 @@
 import Image from "next/image";
 
+import {fetchUser} from './api/api'
+
+import { useRouter } from 'next/router'
+
+import React, { useEffect, useState } from "react";
+
+import { signOut, useSession } from 'next-auth/react'
+
+import Link from 'next/link'
+
+
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
+
 const Profile = () => {
     // return
+    const router = useRouter()
+    const [user, setUser] = useState();
+    const [state, setState] = useState();
+
+    const { data: session, status } = useSession()
+
+    useEffect(() => {
+        setState('loading');
+        if(!router.isReady) return;
+        if (status == "authenticated") {
+        fetchUser(session.user.id)
+              .then((p) => {
+                setUser(p)
+                setState('done')
+              })
+              .catch((e) => {
+                setState('error')
+              });
+    
+            }
+        
+      },  [router.isReady]);
+
+
+      if (status != "authenticated") {
+        return (
+            <div className="container">
+                <div className="text-center mt-4">
+                    <h3 className="text-4xl font-bold mb-4">You are not logged in</h3>
+                    <Link href="login">
+                    <button className="btn btn-primary">Sign in</button>
+                    </Link>
+                </div>
+            </div>
+        );
+      }
+
+    if (!user) return null;
+
+
+    
+    if (!user || state === 'loading')
+    return (
+      <section class="section mt-3">
+          <div class="container">
+                  <div class="row">
+                      
+                      <div class="col-lg-8 col-lg-7">
+      
+      
+                      <Skeleton count={10}/>
+      
+                      
+      
+                  
+                  
+                      </div>
+              
+      
+                      <div class="col-lg-4 col-md-5 mt-4 mt-sm-0 pt-2 pt-sm-0 ">
+                          <div class="card border-0 bg-light p-4 shadow">
+                              <div class="card-body">
+      
+      
+                                  <div class="widget mb-4 pb-2">
+                                  <Skeleton count={10}/>
+                                  </div>
+      
+                              </div>
+                          </div>
+                      
+                      </div>
+                  </div>
+      
+              </div>
+          </section>
+    );
+
+    if (state === 'error')
+    return (
+        <div className="flex h-screen w-full items-center justify-center bg-stone-900 text-white">
+            Something went wrong!!
+        </div>
+    );
+
+
+    
     return (
         <section >
             <div class="container py-5">
@@ -20,12 +121,11 @@ const Profile = () => {
                     height={100}
                   />
 
-                        <h5 class="my-3">John Smith</h5>
-                        <p class="text-muted mb-1">Full Stack Developer</p>
-                        <p class="text-muted mb-4">Bay Area, San Francisco, CA</p>
+                        <h5 class="my-3">{user.firstName} {user.lastName}</h5>
+                        <p class="text-muted mb-1">{user.usn}</p>
                         <div class="d-flex justify-content-center mb-2">
-                        <button type="button" class="btn btn-primary">Follow</button>
-                        <button type="button" class="btn btn-outline-primary ms-1">Message</button>
+                        <button type="button" class="btn btn-primary ml-2">Events</button>
+                        <button type="button" class="btn btn-outline-primary ms-1 ml-2" onClick={() => signOut()}>Logout</button>
                         </div>
                     </div>
                     </div>
@@ -38,119 +138,80 @@ const Profile = () => {
                 <div class="col-lg-8">
                     <div class="card mb-4">
                     <div class="card-body">
+                  
+
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">ID</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0">{user.id}</p>
+                        </div>
+                        </div>
+
+                        <hr/>
+
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Username</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0">@{user.username}</p>
+                        </div>
+                        </div>
+
+                        <hr/>
+
+
                         <div class="row">
                         <div class="col-sm-3">
                             <p class="mb-0">Full Name</p>
                         </div>
                         <div class="col-sm-9">
-                            <p class="text-muted mb-0">Johnatan Smith</p>
+                            <p class="text-muted mb-0">{user.firstName} {user.lastName}</p>
                         </div>
                         </div>
-                        {/* <hr> */}
+                        <hr />
                         <div class="row">
                         <div class="col-sm-3">
                             <p class="mb-0">Email</p>
                         </div>
                         <div class="col-sm-9">
-                            <p class="text-muted mb-0">example@example.com</p>
+                            <p class="text-muted mb-0">{user.email}</p>
                         </div>
                         </div>
                         <hr/>
-                        <div class="row">
-                        <div class="col-sm-3">
-                            <p class="mb-0">Phone</p>
-                        </div>
-                        <div class="col-sm-9">
-                            <p class="text-muted mb-0">(097) 234-5678</p>
-                        </div>
-                        </div>
-                        <hr/>
-                        <div class="row">
-                        <div class="col-sm-3">
-                            <p class="mb-0">Mobile</p>
-                        </div>
-                        <div class="col-sm-9">
-                            <p class="text-muted mb-0">(098) 765-4321</p>
-                        </div>
-                        </div>
-                        <hr/>
-                        <div class="row">
-                        <div class="col-sm-3">
-                            <p class="mb-0">Address</p>
-                        </div>
-                        <div class="col-sm-9">
-                            <p class="text-muted mb-0">Bay Area, San Francisco, CA</p>
-                        </div>
-                        </div>
+                      
                     </div>
                     </div>
                     <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <div class="card mb-4 mb-md-0">
                         <div class="card-body">
-                            <p class="mb-4"><span class="text-primary font-italic me-1">assigment</span> Project Status
-                            </p>
-                            <p class="mb-1" >Web Design</p>
-                            <div class="progress rounded" >
-                            <div class="progress-bar" role="progressbar"  aria-valuenow="80"
-                                aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <p class="mt-4 mb-1" >Website Markup</p>
-                            <div class="progress rounded" >
-                            <div class="progress-bar" role="progressbar"  aria-valuenow="72"
-                                aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <p class="mt-4 mb-1" >One Page</p>
-                            <div class="progress rounded" >
-                            <div class="progress-bar" role="progressbar"  aria-valuenow="89"
-                                aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <p class="mt-4 mb-1" >Mobile Template</p>
-                            <div class="progress rounded" >
-                            <div class="progress-bar" role="progressbar"  aria-valuenow="55"
-                                aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <p class="mt-4 mb-1" >Backend API</p>
-                            <div class="progress rounded mb-2" >
-                            <div class="progress-bar" role="progressbar" aria-valuenow="66"
-                                aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
+                            <h4 class="card-title mb-4">Registered Events</h4>
+                        <table class="table">
+                                <thead class="thead-dark">
+                                    <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Event Name</th>
+                                    <th scope="col">Start Date</th>
+                                    <th scope="col">End Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                    <th scope="row">1</th>
+                                    <td>Mark</td>
+                                    <td>Otto</td>
+                                    <td>@mdo</td>
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
                         </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="card mb-4 mb-md-0">
-                        <div class="card-body">
-                            <p class="mb-4"><span class="text-primary font-italic me-1">assigment</span> Project Status
-                            </p>
-                            <p class="mb-1" >Web Design</p>
-                            <div class="progress rounded" >
-                            <div class="progress-bar" role="progressbar"  aria-valuenow="80"
-                                aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <p class="mt-4 mb-1" >Website Markup</p>
-                            <div class="progress rounded" >
-                            <div class="progress-bar" role="progressbar"  aria-valuenow="72"
-                                aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <p class="mt-4 mb-1" >One Page</p>
-                            <div class="progress rounded" >
-                            <div class="progress-bar" role="progressbar"  aria-valuenow="89"
-                                aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <p class="mt-4 mb-1" >Mobile Template</p>
-                            <div class="progress rounded" >
-                            <div class="progress-bar" role="progressbar"  aria-valuenow="55"
-                                aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <p class="mt-4 mb-1" >Backend API</p>
-                            <div class="progress rounded mb-2" >
-                            <div class="progress-bar" role="progressbar"  aria-valuenow="66"
-                                aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
+                    
                     </div>
                 </div>
                 </div>

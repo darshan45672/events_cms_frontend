@@ -80,12 +80,20 @@ const HeaderComponent = () => {
                 { status === "authenticated" ? 
                 
             
+                <>
+                <Link href="/profile">
+                <NavItem>
+                <a className="btn btn-dark">
+              PROFILE
+                </a>
+                </NavItem>
+                </Link>
                 <NavItem>
                 <a className="btn btn-info" onClick={() => signOut()}>
               LOG OUT 
                 </a>
                 </NavItem>
-                  
+                </>
                 
                 : 
                 

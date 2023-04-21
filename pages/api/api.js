@@ -30,6 +30,14 @@ export async function fetchSingleEvent(id){
   return res.data;
 };
 
+export async function fetchUser(id){
+  const res = await axios.get(
+      `${url}/users/${id}`
+  );
+  
+  return res.data;
+}
+
 
 export async function registerEvent(event_id, user_id){
   const res = await axios.post(`${url}/eventRegistrations`,
