@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 const Profile = () => {
+    // return
     return (
         <section >
             <div class="container py-5">
