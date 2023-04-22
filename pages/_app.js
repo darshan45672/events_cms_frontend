@@ -13,14 +13,15 @@ const client = new ApolloClient({
 function MyApp({ Component,
   pageProps: { session, ...pageProps } }) {
   return (
+    <SessionProvider session={session}>
     <ApolloProvider client={client}>
-      <SessionProvider session={session}>
       <Layout>
       <Component {...pageProps} />
     </Layout>
-    </SessionProvider>
+
    
     </ApolloProvider>
+    </SessionProvider>
   );
 }
 

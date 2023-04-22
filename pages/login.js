@@ -25,8 +25,9 @@ const SignIn = () => {
     const result = await signIn("credentials", {
       username: email,
       password: password,
-      // redirect: true,
+      redirect: true,
       // callbackUrl: "http://localhost:3006/",
+      callbackUrl: `${window.location.origin}/profile`,
     });
   }
 
@@ -55,7 +56,7 @@ const SignIn = () => {
 
 
 
-    <button type='submit' class="btn btn-info btn-block mb-4" onClick={handleLogin}>Sign in</button>
+    <button class="btn btn-info btn-block mb-4" onClick={handleLogin}>Sign in</button>
 
 
     <div class="text-center">

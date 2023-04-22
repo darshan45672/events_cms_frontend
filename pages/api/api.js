@@ -41,15 +41,17 @@ export async function fetchUser(id){
 
 export async function registerEvent(event_id, user_id){
   const res = await axios.post(`${url}/eventRegistrations`,
-  {
-      "event": {
-        "id": "string"
+      {
+          event: {
+            id: event_id
+          },
+          user: {
+            id: user_id
+          }
       },
-      "user": {
-        "id": "string"
-      }
-  }
+  
   );
+  
   
   return res.data;
 }
