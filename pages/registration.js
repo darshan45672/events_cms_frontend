@@ -7,6 +7,9 @@ import { useQuery, gql } from "@apollo/client";
 import {signup} from './api/api'
 
 import React, { useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const BRANCHES_QUERY = gql`
 {
@@ -42,6 +45,23 @@ const Registration = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+
+    if (!username || !password || !firstName || !lastName || !email || !usn || !branch) {
+           
+      toast.error("Enter all fields", {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          })
+      return;
+    }
+
     const form = 
     {  
       username: username,
@@ -58,12 +78,24 @@ const Registration = () => {
     console.log(form);
     signup(form).then((res) => {
       console.log(res);
+    }).catch((err) => {
+      toast.error("Something Wrong", {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        })
     })
   }
  
 
   return (
     <div className='container mt-4'>
+         <ToastContainer />
     <div className='row mt-4'>
       <div className='col-md-3'></div>
       <div className='col-md-6'>

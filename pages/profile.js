@@ -57,7 +57,7 @@ query ($where: UserWhereUniqueInput!) {
 
 const Profile = ({user}) => {
     // return
-    const router = useRouter()
+
     const { data: session, status } = useSession()
 
     const [modal, setModal] = useState(false);
@@ -65,6 +65,17 @@ const Profile = ({user}) => {
     const toggle = () => setModal(!modal);
 
  
+    if (!user) {
+        return (<div className="container">
+        <div className="text-center mt-4">
+            <h3 className="text-4xl font-bold mb-4">You are not logged in</h3>
+            <Link href="login">
+            <button className="btn btn-primary">Sign in</button>
+            </Link>
+        </div>
+    </div>)
+    }
+
     const { data, loading, error } = useQuery(USER_QUERY, {
         variables: {
             "where": {
