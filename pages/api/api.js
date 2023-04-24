@@ -51,8 +51,17 @@ export async function registerEvent(event_id, user_id){
       },
   
   );
+
+
   
-  
+  return res.data;
+}
+
+
+
+
+export async function postEvent(form){
+  const res = await axios.post(`${url}/events`, form,);
   return res.data;
 }
 

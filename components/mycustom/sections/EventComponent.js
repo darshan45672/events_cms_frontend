@@ -26,6 +26,7 @@ const EVENTS_QUERY = gql`
       endDate
       venue
       id
+      img
     }
   }
 }
@@ -72,10 +73,9 @@ const EventComponent = () => {
                   <Card className="card-shadow">
                     <a  className="img-ho">
                       <Link href={`events/${event.id}`}>
-                      <Image
+                      <img
                         className="card-img-top"
-                        src={img1}
-                        alt="wrappixel kit"
+                        src={event.img ? event.img : img1}
                       />
                       </Link>
                     </a>

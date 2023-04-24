@@ -25,6 +25,7 @@ const EVENT_QUERY = gql`
 query ($where: EventWhereUniqueInput!) {
     event(where:$where) {
       id
+      img
       title
     	description
         startDate
@@ -133,10 +134,12 @@ if (error)
                       <div class="col-lg-8 col-lg-7">
       
       
-               <Image
+               <img
                               className="img-fluid rounded shadow"
-                              src={img1}
-                              alt="wrappixel kit"
+                              src={data.event.img ? data.event.img : img1}
+                              style={{
+                                width: "100%",
+                              }}
                             />
                           <h4 class="mt-4">{data.event.title}</h4>
                           <p>{data.event.description}</p>

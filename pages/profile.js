@@ -6,8 +6,7 @@ import { useRouter } from 'next/router'
 
 import React, { useEffect, useState } from "react";
 
-import { signOut, useSession } from 'next-auth/react'
-
+import { signOut, useSession, getSession } from 'next-auth/react'
 import Link from 'next/link'
 import { Row, Col, Container, Card, CardBody,Spinner,Badge,Button,Modal,ModalBody,ModalFooter,ModalHeader  } from "reactstrap";
 
@@ -20,6 +19,11 @@ import { useQuery, gql } from "@apollo/client";
 import Moment from 'react-moment';
 
 import CreateEvent from "../components/events/CreateEvent";
+import axios from "axios";
+
+import QRCode from "react-qr-code";
+
+import profileImg from "../assets/images/profile.png"
 
 const USER_QUERY = gql`
 query ($where: UserWhereUniqueInput!) {
@@ -51,7 +55,7 @@ query ($where: UserWhereUniqueInput!) {
 `;
 
 
-const Profile = () => {
+const Profile = ({user}) => {
     // return
     const router = useRouter()
     const { data: session, status } = useSession()
@@ -60,15 +64,17 @@ const Profile = () => {
 
     const toggle = () => setModal(!modal);
 
+ 
     const { data, loading, error } = useQuery(USER_QUERY, {
         variables: {
             "where": {
-              "id": session.user.id
+              "id": user.id
             }
           },
       });
 
 
+      
 
       if (status != "authenticated") {
         return (
@@ -159,13 +165,13 @@ const Profile = () => {
 
 <Image
                       class="rounded-circle img-fluid"
-                    src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
+                    src={profileImg}
                     width={100}
                     height={100}
                   />
 
                         <h5 class="my-3">{data.user.firstName} {data.user.lastName}</h5>
-                        <Badge color="primary">
+                        <Badge color="info">
                         {data.user.branch.name}
 </Badge>
                       
@@ -173,24 +179,28 @@ const Profile = () => {
                         <p class="text-muted mb-1">USN: {data.user.usn}</p>
                         <div class="d-flex justify-content-center mb-2">
                         
-                        <button type="button" class="btn btn-primary ml-2">Events</button>
-                      
-                        <button type="button" class="btn btn-success ms-1 ml-2"onClick={toggle}>
-                            Create Event
-                        </button>
-                        <button type="button" class="btn btn-outline-primary ms-1 ml-2" onClick={() => signOut()}>Logout</button>
+                        <button type="button" class="btn btn-info ml-2">Events</button>
+                  
+                        <button type="button" class="btn btn-outline-info ms-1 ml-2" onClick={() => signOut()}>Logout</button>
                         
                         </div>
+                       
                     </div>
                     </div>
-                    <div class="card mb-4 mb-lg-0">
+                    <div class="card mb-4 mb-lg-0 shadow">
                     <div class="card-body p-0">
-                     
+                    <div className="row">
+                        <div className="col-md-12 text-center pt-4 pb-4">
+                        <QRCode
+                        style={{ height: "auto", maxWidth: "50%", width: "100%" }}
+                        size={200} value="hey" />
+                        </div>
+                        </div>
                     </div>
                     </div>
                 </div>
                 <div class="col-lg-8">
-                    <div class="card mb-4">
+                    <div class="card mb-4 shadow">
                     <div class="card-body">
                   
 
@@ -234,17 +244,34 @@ const Profile = () => {
                             <p class="text-muted mb-0">{data.user.email}</p>
                         </div>
                         </div>
+                       
                         <hr/>
                       
                     </div>
                     </div>
                     <div class="row">
                     <div class="col-md-12">
-                        <div class="card mb-4 mb-md-0">
+                        <div class="card mb-4 mb-md-0 shadow">
                         <div class="card-body">
-                            <h4 class="card-title mb-4">Registered Events</h4>
+                            <div className="row">
+                                <div className="col-md-8">
+                                <h4 class="card-title mb-4">Registered Events</h4>
+                            
+                                </div>
+                                <div className="col-md-4">
+                                {
+                             data.user.roles.includes("eventManager") ? 
+                             <button type="button" class="btn-info ms-1 ml-2 p-2 mb-2"onClick={toggle}>
+                             Create Event
+                         </button>
+                             : <></>
+                        }
+                       
+                                </div>
+                            </div>
+                          
                         <table class="table">
-                                <thead class="thead-dark">
+                                <thead class="bg-info text-white">
                                     <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">Event Name</th>
@@ -288,7 +315,7 @@ const Profile = () => {
             <Modal isOpen={modal} toggle={toggle} >
                 <ModalHeader toggle={toggle}>Create Event</ModalHeader>
                 <ModalBody>
-                <CreateEvent />
+                <CreateEvent user={data.user} />
                 </ModalBody>
              
             </Modal>
@@ -299,3 +326,17 @@ const Profile = () => {
 
 
 export default Profile;
+
+
+export async function getServerSideProps(ctx) {
+    const session = await getSession(ctx)
+    if (!session) {
+      return {
+        props: {}
+      }
+    }
+    const { user } = session;
+    return {
+      props: { user },
+    }
+}

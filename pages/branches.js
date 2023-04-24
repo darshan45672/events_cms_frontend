@@ -53,11 +53,11 @@ const Branch = () => {
                 </h6> */}
               </Col>
             </Row>
-  
+            <Row className="justify-content-left">
             {data.branches.map((branch) => (
-                branch.events.length > 0 ? (
+          
   
-                <Row className="justify-content-left">
+             
                   <Col md="4" className="text-center">
                   
                         <Card
@@ -82,14 +82,14 @@ const Branch = () => {
                         </CardBody>
                         </Card>
                   </Col>
-                </Row>
+              
   
                                 
-                ) : ""
+             
               )
               
               )}
-              
+                </Row>
               
           </Container>
         </div>

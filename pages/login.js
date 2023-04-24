@@ -8,10 +8,14 @@ import { Button } from "reactstrap";
 
 import Link from 'next/link'
 
+import { useRouter } from 'next/router'
 
+
+import { useAlert } from 'react-alert'
 
 const SignIn = () => {
-
+  const alert = useAlert()
+  
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
 
@@ -22,19 +26,33 @@ const SignIn = () => {
 
 
   const handleLogin  = async () => {
+    if (!email || !password) {
+      alert.show('Enter all fields',
+      {
+        timeout: 2000, // custom timeout just for this one alert
+        type: 'error',
+      }
+      )
+      return;
+    }
     const result = await signIn("credentials", {
       username: email,
       password: password,
       redirect: true,
       // callbackUrl: "http://localhost:3006/",
-      callbackUrl: `${window.location.origin}/profile`,
+      callbackUrl: `${window.location.origin}/login`,
+    }).then((res) => {
+      console.log(res);
+    }).catch((err) => {
+      alert(err);
     });
   }
 
 
-  if (status === "authenticated") {
-    return <p>Signed in as {session.user.id}</p>
-  }
+  if (status == "authenticated") {
+    const router = useRouter()
+    router.push('/profile')
+}
   return (
     <div className='container mt-4'>
       <div className='row mt-4'>
