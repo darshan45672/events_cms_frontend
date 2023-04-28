@@ -198,7 +198,7 @@ const Profile = ({user}) => {
                        
                     </div>
                     </div>
-                    <div class="card mb-4 mb-lg-0 shadow">
+                    {/* <div class="card mb-4 mb-lg-0 shadow">
                     <div class="card-body p-0">
                     <div className="row">
                         <div className="col-md-12 text-center pt-4 pb-4">
@@ -208,7 +208,7 @@ const Profile = ({user}) => {
                         </div>
                         </div>
                     </div>
-                    </div>
+                    </div> */}
                 </div>
                 <div class="col-lg-8">
                     <div class="card mb-4 shadow">
