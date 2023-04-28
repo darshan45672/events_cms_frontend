@@ -2,7 +2,8 @@
     import { useQuery, gql } from "@apollo/client";
     import Moment from "react-moment";
     
-  
+    import { useRouter } from 'next/router'
+
 
 
     import Skeleton from 'react-loading-skeleton'
@@ -10,20 +11,40 @@
 
     
 export default function EventRegistration({eventId}) {
-    const QUERY = gql`
-    query {
-        eventRegistrations(eventId: "${eventId}") {
+    const EVENT_QUERY = gql`
+    query ($where: EventWhereUniqueInput!) {
+        event(where:$where) {
           id
-          user {
-            firstName
-            lastName
-            email
-          }
+          img
+          title
+            description
+            startDate
+              endDate
+              venue
+          eventRegistrations{
+              user{
+              id
+              email
+              firstName
+              lastName
+            }
             createdAt
+          }
         }
-      }
-`;
-    const { data,refetch, loading, error } = useQuery(QUERY);
+      }      
+    `;
+    const router = useRouter()
+    const { id } = router.query
+
+    const { data, refetch, loading, error } = useQuery(EVENT_QUERY, {
+        variables: {
+            "where": {
+              "id": router.query.id
+            }
+          },
+          fetchPolicy: 'cache-and-network'
+      });
+
 
 
     if (loading)
@@ -36,7 +57,12 @@ export default function EventRegistration({eventId}) {
     );
 
     return (
+      <div className="container mt-4">
+         <h3>Event name: {data.event.title}</h3>
+         <h3>Registrations: {data.event.eventRegistrations.length}</h3>
+   
         <table class="table mt-2">
+       
         <thead class="bg-info text-white">
             <tr>
             <th scope="col">#</th>
@@ -46,7 +72,7 @@ export default function EventRegistration({eventId}) {
             </tr>
         </thead>
         <tbody>
-            {data.eventRegistrations.map((eventRegistration, index) => (
+            {data.event.eventRegistrations.map((eventRegistration, index) => (
                 <tr key={eventRegistration.id}>
                     <th scope="row">{index + 1}</th>
                     <td>{eventRegistration.user.firstName} {eventRegistration.user.lastName}</td>
@@ -56,5 +82,6 @@ export default function EventRegistration({eventId}) {
             ))}
              </tbody>
         </table>
+        </div>
     )
 }
