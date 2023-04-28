@@ -36,6 +36,7 @@ query {
         venue
         createdAt
         updatedAt
+        img
         eventRegistrations{
           user {
             firstName
@@ -81,6 +82,13 @@ query {
                   <h2 className="title" >{data.branch.name} Events</h2>
                 </Col>
 
+                {
+                  data.branch.events.length == 0 ? (
+                    <Col md="12" className="text-center">
+                      <h6 className="title" >Oop..No Events Found</h6>
+                    </Col>
+                  ) : null
+                }
                 {data.branch.events.map((event) => (
                   <Col md="4">
                   <Card className="card-shadow">
