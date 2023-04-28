@@ -16,15 +16,17 @@ import BlogComponent from "./sections/blogcomponent";
 import C2aComponent from "./sections/c2acomponent";
 import ContactComponent from "./sections/contactcomponent";
 import CallToAction from "../../components/call-to-action/CallToAction";
-
+import LatestEvent from "../events/LatestEvent";
 const CustomComponents = () => {
   return (
     <>
       
       <Banner2 />
-      <EventComponent/>
+      {/* <EventComponent/> */}
+      <LatestEvent/>
       <TestimonialComponent/>
       <ContactComponent/>
+
       
     </>
   );

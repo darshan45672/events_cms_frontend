@@ -168,6 +168,9 @@ if (error)
                                   <h6>{data.event.venue}</h6>
 
                                   {
+                                    session && session.user.roles.includes("eventManager") ?
+                                    <></>
+                                    :
                                     data.event.eventRegistrations.find((reg) => reg.user.id === session.user.id) ? 
                               
                                             <h2>
@@ -177,7 +180,11 @@ if (error)
                                         </h2>
                                      : 
                                      <Button color="primary" onClick={() => onRegister()}>Register</Button>
+
+                                     
                                   }
+
+                       
                                   
                                   <br/>
                                   {/* <span class="badge badge-success mb-4">Registered</span> */}

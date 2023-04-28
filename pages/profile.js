@@ -281,7 +281,11 @@ const Profile = ({user}) => {
                                 </div>
                             </div>
                           
-                        <table class="table">
+                          {
+                            data.user.roles.includes("eventManager") ?
+                            <></>
+                            :
+                            <table class="table">
                                 <thead class="bg-info text-white">
                                     <tr>
                                     <th scope="col">#</th>
@@ -313,6 +317,8 @@ const Profile = ({user}) => {
                                     
                                 </tbody>
                             </table>
+                          }
+                        
                         </div>
                         </div>
                     </div>
