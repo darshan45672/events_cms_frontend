@@ -149,14 +149,14 @@ const CreateEvent = (props) => {
                             <Label for="exampleEmail" className="mt-2">
                             Start Date
                             </Label>
-                            <DatePicker selected={startDate} dateFormat='dd/MM/yyyy h:m a'  showTimeSelect className="form-control" onChange={(date) => setStartDate(date)} />
+                            <DatePicker selected={startDate} dateFormat='dd/MM/yyyy h:mm a'  showTimeSelect className="form-control" onChange={(date) => setStartDate(date)} />
 
                         </div>
                         <div className="col-md-12">
                         <Label for="exampleEmail" className="mt-2">
                         End Date
                         </Label>
-                        <DatePicker selected={endDate}  dateFormat='dd/MM/yyyy h:m a'  showTimeSelect className="form-control" onChange={(date) => setStartDate(date)} />
+                        <DatePicker selected={endDate}  dateFormat='dd/MM/yyyy h:mm a'  showTimeSelect className="form-control" onChange={(date) => setEndDate(date)} />
 
                         </div>
                     </div>
