@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import {fetchUser} from './api/api'
+import {deleteEventRegistration} from './api/api'
 
 import { useRouter } from 'next/router'
 
@@ -8,8 +8,11 @@ import React, { useEffect, useState } from "react";
 
 import { signOut, useSession, getSession } from 'next-auth/react'
 import Link from 'next/link'
-import { Row, Col, Container, Card, CardBody,Spinner,Badge,Button,Modal,ModalBody,ModalFooter,ModalHeader  } from "reactstrap";
+import { Row, Col,
+    Container,  CardBody,Spinner,Badge,Button,Modal,ModalBody,
+    ModalFooter,ModalHeader,TabPane,TabContent,NavItem,Nav, NavLink } from "reactstrap";
 
+    import {Tabs, Tab} from 'react-bootstrap-tabs';
 
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -24,6 +27,12 @@ import axios from "axios";
 import QRCode from "react-qr-code";
 
 import profileImg from "../assets/images/profile.png"
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Branch from "./branches";
+import BranchEventTable from "../components/events/BranchEventTable";
+
 
 const USER_QUERY = gql`
 query ($where: UserWhereUniqueInput!) {
@@ -42,6 +51,7 @@ query ($where: UserWhereUniqueInput!) {
       roles
       createdAt
       eventRegistrations{
+        id
         event{
           title
           id
@@ -55,6 +65,8 @@ query ($where: UserWhereUniqueInput!) {
 `;
 
 
+
+
 const Profile = ({user}) => {
     // return
 
@@ -63,6 +75,8 @@ const Profile = ({user}) => {
     const [modal, setModal] = useState(false);
 
     const toggle = () => setModal(!modal);
+
+    
 
  
     if (!user) {
@@ -76,7 +90,8 @@ const Profile = ({user}) => {
     </div>)
     }
 
-    const { data, loading, error } = useQuery(USER_QUERY, {
+
+    const { data,refetch, loading, error } = useQuery(USER_QUERY, {
         variables: {
             "where": {
               "id": user.id
@@ -84,7 +99,35 @@ const Profile = ({user}) => {
           },
       });
 
+      const handleUnregister = async (id) => {
+        deleteEventRegistration(id).then((res) => {
+            refetch();
+            toast.success("Unregistered Successfully", {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                })
+      
+        }).catch((err) => {
+            toast.error("Something Wrong", {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                })
 
+            })
+        
+      }
       
 
       if (status != "authenticated") {
@@ -108,6 +151,7 @@ const Profile = ({user}) => {
     return (
 
         <section >
+                     <ToastContainer />
         <div class="container py-5">
          
 
@@ -162,7 +206,8 @@ const Profile = ({user}) => {
     );
 
 
-    
+
+
     return (
         <section >
             <div class="container py-5">
@@ -215,7 +260,9 @@ const Profile = ({user}) => {
                     <div class="card-body">
                   
 
-                    <div class="row">
+                    <Tabs onSelect={(index, label) => console.log(label + ' selected')}>
+                    <Tab label="Profile">
+                    <div class="row mt-2">
                         <div class="col-sm-3">
                             <p class="mb-0">ID</p>
                         </div>
@@ -257,45 +304,34 @@ const Profile = ({user}) => {
                         </div>
                        
                         <hr/>
-                      
-                    </div>
-                    </div>
-                    <div class="row">
-                    <div class="col-md-12">
-                        <div class="card mb-4 mb-md-0 shadow">
-                        <div class="card-body">
+                    </Tab>
+                    {
+                         data.user.roles.includes("eventManager") ? 
+                            <Tab label={`${data.user.branch.name} Events`}>
                             <div className="row">
-                                <div className="col-md-8">
-                                <h4 class="card-title mb-4">Registered Events</h4>
-                            
-                                </div>
-                                <div className="col-md-4">
-                                {
-                             data.user.roles.includes("eventManager") ? 
-                             <button type="button" class="btn-info ms-1 ml-2 p-2 mb-2"onClick={toggle}>
+                                <div className="col-9"></div>
+                                <div className="col-3 mt-2">
+                                <button type="button" class="btn-danger ms-1 ml-2 p-2 mb-2"onClick={toggle}>
                              Create Event
                          </button>
-                             : <></>
-                        }
-                       
                                 </div>
                             </div>
-                          
-                          {
-                            data.user.roles.includes("eventManager") ?
-                            <></>
-                            :
-                            <table class="table">
+                            <BranchEventTable branchId={data.user.branch.id} />
+                            </Tab>
+                         : <Tab label="Event Registrations">
+                    <table class="table mt-2">
                                 <thead class="bg-info text-white">
                                     <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col">Event Name</th>
+                                    <th scope="col">Name</th>
                                     <th scope="col">Start Date</th>
                                     <th scope="col">End Date</th>
                                     <th scope="col">Registered Date</th>
+                                    <th scope="col">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    
                                    {
                                         data.user.eventRegistrations.map((reg, index) => {
                                             return (
@@ -311,17 +347,25 @@ const Profile = ({user}) => {
                                                     <td>
                                                     <Moment format="DD/MM/YYYY H:m a" >{reg.createdAt}</Moment>
                                                     </td>
+                                                    <td>
+                                                        <button className="btn btn-danger btn-sm" onClick={() => handleUnregister(reg.id)}>Unregister</button>
+                                                    </td>
                                                 </tr>
                                             )})
                                    }
                                     
                                 </tbody>
                             </table>
-                          }
-                        
-                        </div>
-                        </div>
+                    </Tab>
+                    }
+                    
+                </Tabs>
+                    
+                      
                     </div>
+                    </div>
+                    <div class="row">
+                  
                     
                     </div>
                 </div>

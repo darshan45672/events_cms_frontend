@@ -65,3 +65,8 @@ export async function postEvent(form){
   return res.data;
 }
 
+
+export async function deleteEventRegistration(id){
+  const res = await axios.delete(`${url}/eventRegistrations/${id}`);
+  return res.data;
+}

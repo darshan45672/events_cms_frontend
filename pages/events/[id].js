@@ -70,7 +70,7 @@ function ShowEvent() {
 
     function onRegister() {
         registerEvent(data.event.id, session.user.id).then((p) => {
-            console.log("Hello");
+          
             refetch();
         });
     }
