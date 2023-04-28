@@ -74,7 +74,7 @@ const Branch = () => {
                             <CardTitle tag="h5" className="text-white">
                             {branch.name}
                             </CardTitle>
-                            <Link href="/events" >
+                            <Link href={ `/branch/${branch.id}`} >
                             <Button color="primary">
                            View Events
                             </Button>

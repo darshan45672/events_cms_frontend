@@ -8,8 +8,13 @@ import {
   Input,
   Button,
 } from "reactstrap";
+import { useForm, ValidationError } from '@formspree/react';
 
 const ContactComponent = () => {
+  const [state, handleSubmit] = useForm("mrgvrvry");
+  if (state.succeeded) {
+    return <p>Thanks for contacting!</p>;
+}
   return (
     <div>
       {/* <div className="spacer bg-light">
@@ -34,7 +39,7 @@ const ContactComponent = () => {
                 <Col lg="8">
                   <div className="contact-box p-r-40">
                     <h4 className="title">Quick Contact</h4>
-                    <Form>
+                    <Form onSubmit={handleSubmit}>
                       <Row>
                         <Col lg="6">
                           <FormGroup className="m-t-15">
