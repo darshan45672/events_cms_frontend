@@ -15,6 +15,15 @@ import { useQuery, gql } from "@apollo/client";
 import Moment from 'react-moment';
 import Link from "next/dist/client/link";
 
+
+import EventCard from "../../events/EventCard";
+
+// Import Swiper React components
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+// Import Swiper styles
+import 'swiper/css';
+
 const EVENTS_QUERY = gql`
 {
   branches{
@@ -70,23 +79,7 @@ const EventComponent = () => {
 
                 {branch.events.map((event) => (
                   <Col md="4">
-                  <Card className="card-shadow">
-                    <a  className="img-ho">
-                      <Link href={`events/${event.id}`}>
-                      <img
-                        className="card-img-top"
-                        src={event.img ? event.img : img1}
-                      />
-                      </Link>
-                    </a>
-                    <CardBody>
-                      <h5 className="font-medium m-b-0">
-                      {event.title}
-                      </h5>
-                      <p className="m-b-0 font-14">
-                        Start Date - <Moment format="DD/MM/YYYY H:m a" >{event.startDate}</Moment></p>
-                    </CardBody>
-                  </Card>
+                      <EventCard event={event} />
                 </Col>
                 ))}
               </Row>

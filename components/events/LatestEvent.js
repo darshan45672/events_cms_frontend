@@ -10,6 +10,24 @@ import { useQuery, gql } from "@apollo/client";
 import Moment from 'react-moment';
 import Link from "next/dist/client/link";
 
+// Import Swiper React components
+import { Swiper, SwiperSlide} from 'swiper/react';
+
+// Import Swiper styles
+import 'swiper/css';
+import "swiper/css/navigation";
+import EventCard from "./EventCard";
+
+
+
+// import Swiper core and required modules
+import SwiperCore, {
+  Navigation
+} from 'swiper';
+
+// install Swiper modules
+SwiperCore.use([Navigation]);
+
 const EVENTS_QUERY = gql`
 {
   events(orderBy: { createdAt: Desc }){
@@ -57,27 +75,20 @@ const LatestEvent = () => {
                   <h2 className="title" >Latest Events</h2>
                 </Col>
 
+    
+                 <Swiper
+                  spaceBetween={50}
+                  slidesPerView={3}
+                  navigation={true}
+                  onSlideChange={() => console.log('slide change')}
+                  onSwiper={(swiper) => console.log(swiper)}
+                >
                 {data.events.map((event) => (
-                  <Col md="4">
-                  <Card className="card-shadow">
-                    <a  className="img-ho">
-                      <Link href={`events/${event.id}`}>
-                      <img
-                        className="card-img-top"
-                        src={event.img ? event.img : img1}
-                      />
-                      </Link>
-                    </a>
-                    <CardBody>
-                      <h5 className="font-medium m-b-0">
-                      {event.title}
-                      </h5>
-                      <p className="m-b-0 font-14">
-                        Start Date - <Moment format="DD/MM/YYYY H:m a" >{event.startDate}</Moment></p>
-                    </CardBody>
-                  </Card>
-                </Col>
+                  <SwiperSlide key={event.id}>
+                    <EventCard event={event} />
+                  </SwiperSlide>
                 ))}
+    </Swiper>
               </Row>
 
         
