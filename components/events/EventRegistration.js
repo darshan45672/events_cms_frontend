@@ -29,6 +29,7 @@ export default function EventRegistration({eventId}) {
               lastName
             }
             teamMembers 
+            isAttended
             createdAt
           }
         }
@@ -70,6 +71,7 @@ export default function EventRegistration({eventId}) {
             <th scope="col">Name</th>
             <th scope="col">Email</th>
             <th scope="col">Team Members</th>
+            <th scope="col">Attendance</th>
             <th scope="col">Registered Date</th>
             </tr>
         </thead>
@@ -81,6 +83,9 @@ export default function EventRegistration({eventId}) {
                     <td>{eventRegistration.user.email}</td>
                     <td>
                                                         {eventRegistration.teamMembers}
+                                                    </td>
+                    <td>
+                                                        {eventRegistration.isAttended ? "Attended" : "Not Attended"}
                                                     </td>
                     <td><Moment format="DD/MM/YYYY">{eventRegistration.createdAt}</Moment></td>
                 </tr>

@@ -118,6 +118,8 @@ const CreateEvent = (props) => {
                 id: props.user.branch.id
               },
         }).then((res) => {
+
+            props.onUpdate();
             toast.success("Event Created", {
                 position: "bottom-right",
                 autoClose: 5000,

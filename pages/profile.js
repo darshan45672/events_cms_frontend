@@ -248,17 +248,19 @@ const Profile = ({user}) => {
 
                   <UploadProfileButton user_id={data.user.id} onUpdate={refetch}/>
 
-                        <h5 class="my-3">{data.user.firstName} {data.user.lastName}</h5>
-                        <Badge color="info">
+                        <h5 class="mt-2">{data.user.firstName} {data.user.lastName}</h5>
+                        <h4>
+                        <Badge color="info badge-lg">
                         {data.user.branch.name}
-</Badge>
-                      
+                        </Badge>
+                      </h4>
                            
                         <p class="text-muted mb-1">USN: {data.user.usn}</p>
                         <div class="d-flex justify-content-center mb-2">
                         
+                        <Link href="/events">
                         <button type="button" class="btn btn-info ml-2">Events</button>
-                  
+                        </Link>
                         <button type="button" class="btn btn-outline-info ms-1 ml-2" onClick={() => signOut()}>Logout</button>
                         
                         </div>
@@ -399,7 +401,7 @@ const Profile = ({user}) => {
             <Modal isOpen={modal} toggle={toggle} onExit={refetch}>
                 <ModalHeader toggle={toggle}>Create Event</ModalHeader>
                 <ModalBody>
-                <CreateEvent user={data.user} />
+                <CreateEvent user={data.user} onUpdate={refetch} />
                 </ModalBody>
              
             </Modal>
