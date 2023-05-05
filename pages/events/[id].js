@@ -10,7 +10,7 @@ import React, { useEffect, useState} from "react";
 
 import Moment from 'react-moment';
 
-import { Row, Col, Container, Card, CardBody, Spinner, Button, Badge} from "reactstrap";
+import { Row, Col, Container, Card, CardBody, Spinner, Button, Badge, Modal, ModalHeader, ModalBody, ModalFooter,FormGroup,Label,Input } from "reactstrap";
 
 import {registerEvent} from '../../pages/api/api'
 
@@ -20,6 +20,16 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import { signOut, useSession } from 'next-auth/react'
 
 import { useQuery, gql } from "@apollo/client";
+import moment from 'moment';
+
+
+
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import FeedbackForm from '../../components/events/FeedbackForm';
+
+
 
 const EVENT_QUERY = gql`
 query ($where: EventWhereUniqueInput!) {
@@ -31,12 +41,20 @@ query ($where: EventWhereUniqueInput!) {
         startDate
           endDate
           venue
+          registrationEndDate
+          eventType
+            attendanceCode
+            category{
+                name
+            }
       eventRegistrations{
       	user{
           id
           firstName
           lastName
         }
+        id
+        isAttended
         createdAt
       }
     }
@@ -46,7 +64,6 @@ query ($where: EventWhereUniqueInput!) {
 
 
 function ShowEvent() {
-
 
     const router = useRouter()
     const { id } = router.query
@@ -66,14 +83,62 @@ function ShowEvent() {
     const [state, setState] = useState();
 
 
+    const [modal, setModal] = useState(false);
+    const [teamMembers, setTeamMembers] = useState("");
+     const toggle = () => setModal(!modal);
+
     
 
     function onRegister() {
-        registerEvent(data.event.id, session.user.id).then((p) => {
-          
-            refetch();
-        });
+        if(data.event.eventType == "Team"){
+            if(!teamMembers){
+                toast.info("Enter team members details", {
+                    position: "bottom-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "dark",
+                    })
+                    return
+            }
+           
+        }
+        registerEvent(data.event.id, session.user.id, teamMembers).then((p) => {
+            refetch().then((p) => {
+                toast.success("Registered Successfully", {
+                    position: "bottom-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "dark",
+                    })
+                
+            })
+
+
+           
+        }).catch((err) => {
+            toast.error("Something Wrong", {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                })
+
+            });
     }
+
+
 
 
     if (loading)
@@ -126,8 +191,29 @@ if (error)
     );
 
 
+
+        
+function getRegDetails(){
+    let regDetail = ""
+    data.event.eventRegistrations.find(
+        (reg) => {
+            if(reg.user.id === session.user.id){
+                regDetail = reg
+            }
+        }
+    )
+    return regDetail
+}
+
+
+
+const today = moment();
+const isRegistrationOpen = moment(data.event.registrationEndDate).isAfter(today);
+
     return (
+        
       <section class="section mt-3">
+                   <ToastContainer />
           <div class="container">
                   <div class="row">
                       
@@ -158,30 +244,69 @@ if (error)
       
                                   <div class="widget mb-4 pb-2">
                                   
-                                
+                                  <Badge color="primary" className='text-white p-2 mb-2'>
+                                            { data.event.category ? data.event.category.name: 'Uncategorized'}
+                                            </Badge>
+                                  <Badge color="danger" className='text-white p-2 mb-2 ml-2'>
+                                            { data.event.eventType ? data.event.eventType: ''}
+                                            </Badge>
                                   <p>Start Date</p>
-                                  <h6><Moment format="DD/MM/YYYY H:m a" >{data.event.startDate}</Moment></h6>
+                                  <h6><Moment format="DD/MM/YYYY h:mm a" >{data.event.startDate}</Moment></h6>
                                   <p>End Date</p>
-                                  <h6><Moment format="DD/MM/YYYY H:m a" >{data.event.endDate}</Moment></h6>
+                                  <h6><Moment format="DD/MM/YYYY h:mm a" >{data.event.endDate}</Moment></h6>
+      
+                                  <p>Registration End Date</p>
+                                  <h6><Moment format="DD/MM/YYYY h:mm a" >{data.event.registrationEndDate}</Moment></h6>
       
                                   <p>Venue</p>
                                   <h6>{data.event.venue}</h6>
+                                  
 
                                   {
+                                
                                     session && session.user.roles.includes("eventManager") ?
                                     <></>
                                     :
-                                    data.event.eventRegistrations.find((reg) => reg.user.id === session.user.id) ? 
+                                    data.event.eventRegistrations.find(
+                                        (reg) => reg.user.id === session.user.id) ? 
                               
+                                    <div>
                                             <h2>
                                             <Badge color="success" className='text-white p-2'>
                                             Registered
                                             </Badge>
                                         </h2>
+                                        {
+                                            data.event.attendanceCode ?
+                                        <Button color="primary" onClick={toggle}>Attendance</Button> : <></>
+                                        }
+                                        
+                                        </div>
                                      : 
-                                     <Button color="primary" onClick={() => onRegister()}>Register</Button>
+
+                                     //check if registration is open
+                                     isRegistrationOpen ?
 
                                      
+                                       ( data.event.eventType === "Team" ?
+                                        (
+                                            <>
+                                                     <FormGroup row>
+                                                    <Label for="exampleText" sm={12}>Team Members</Label>
+                                                    <Col sm={10}>
+                                                    <Input type="textarea" name="text" id="exampleText" value={teamMembers}  onChange={(e) => setTeamMembers(e.target.value)}/>
+                                                    </Col>
+                                                </FormGroup>
+                                                <Button color="primary" onClick={() => onRegister()}>Register</Button>
+                                          </>
+                                        ): <Button color="primary" onClick={() => onRegister()}>Register</Button>)
+                                     
+
+                                     :  <p>
+                                        <Badge color="danger" className='text-white p-2'>
+                                        Registration Closed
+                                        </Badge>
+                                     </p>
                                   }
 
                        
@@ -199,6 +324,28 @@ if (error)
                   </div>
       
               </div>
+
+
+
+
+
+                <Modal isOpen={modal} toggle={toggle}>
+                <ModalHeader toggle={toggle}>Attendance and Feedback</ModalHeader>
+                <ModalBody>
+
+                    {
+
+                                        <FeedbackForm event={data.event} reg={getRegDetails()}/>
+                           
+                           
+                    }
+                        
+                </ModalBody>
+         
+              </Modal>
+ 
+
+
           </section>
         );
 

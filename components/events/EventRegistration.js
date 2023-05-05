@@ -28,6 +28,7 @@ export default function EventRegistration({eventId}) {
               firstName
               lastName
             }
+            teamMembers 
             createdAt
           }
         }
@@ -68,6 +69,7 @@ export default function EventRegistration({eventId}) {
             <th scope="col">#</th>
             <th scope="col">Name</th>
             <th scope="col">Email</th>
+            <th scope="col">Team Members</th>
             <th scope="col">Registered Date</th>
             </tr>
         </thead>
@@ -77,6 +79,9 @@ export default function EventRegistration({eventId}) {
                     <th scope="row">{index + 1}</th>
                     <td>{eventRegistration.user.firstName} {eventRegistration.user.lastName}</td>
                     <td>{eventRegistration.user.email}</td>
+                    <td>
+                                                        {eventRegistration.teamMembers}
+                                                    </td>
                     <td><Moment format="DD/MM/YYYY">{eventRegistration.createdAt}</Moment></td>
                 </tr>
             ))}

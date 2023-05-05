@@ -71,10 +71,10 @@ export default function BranchEventTable({branchId}) {
                             <th scope="row">{index + 1}</th>
                             <td>{event.title}</td>
                             <td>
-                            <Moment format="DD/MM/YYYY H:m a" >{event.startDate}</Moment>
+                            <Moment format="DD/MM/YYYY h:mm a" >{event.startDate}</Moment>
                             </td>
                             <td>
-                            <Moment format="DD/MM/YYYY H:m a" >{event.endDate}</Moment>
+                            <Moment format="DD/MM/YYYY h:mm a" >{event.endDate}</Moment>
                             </td>
                             <td>{event.eventRegistrations.length}</td>
                             <td>

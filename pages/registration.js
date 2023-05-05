@@ -271,7 +271,9 @@ const Registration = () => {
       </div>
       <div class="col-md-6 form-outline mb-4">
       <label class="form-label" for="form2Example1">Select Your Branch</label>
+    
       <Input required type="select" name="select" id="exampleSelect" onChange={(e) => setBranch(e.target.value)}>
+      <option value="">Please select</option>
           {
             data.branches.map((branch) => (
               <option value={branch.id}>{branch.name}</option>

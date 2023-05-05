@@ -5,7 +5,7 @@ const url = "http://localhost:3000/api"
 
 
 export default function handler(req, res) {
-  res.status(200).json({ name: 'John Doe' })
+  // res.status(200).json({ name: 'John Doe' })
 }
 
 export async function login(username, password) {
@@ -39,7 +39,7 @@ export async function fetchUser(id){
 }
 
 
-export async function registerEvent(event_id, user_id){
+export async function registerEvent(event_id, user_id, teamMembers){
   const res = await axios.post(`${url}/eventRegistrations`,
       {
           event: {
@@ -47,7 +47,8 @@ export async function registerEvent(event_id, user_id){
           },
           user: {
             id: user_id
-          }
+          },
+          teamMembers: teamMembers
       },
   
   );
@@ -70,3 +71,20 @@ export async function deleteEventRegistration(id){
   const res = await axios.delete(`${url}/eventRegistrations/${id}`);
   return res.data;
 }
+
+
+export async function markAttendance(id,feedback) {
+  console.log(id,feedback);
+  const data = {
+    feedback: feedback,
+    isAttended: true,
+  };
+
+  axios.patch(`/eventRegistrations/${id}`, data)
+    .then((response) => {
+      console.log(response.data);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};

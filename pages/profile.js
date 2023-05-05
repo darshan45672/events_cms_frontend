@@ -33,6 +33,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Branch from "./branches";
 import BranchEventTable from "../components/events/BranchEventTable";
 
+import UploadProfileButton from '../components/profile/UploadProfileButton'
 
 const USER_QUERY = gql`
 query ($where: UserWhereUniqueInput!) {
@@ -42,6 +43,7 @@ query ($where: UserWhereUniqueInput!) {
       firstName
       lastName
       email
+      profilePath
       usn
       branch{
         name
@@ -58,6 +60,7 @@ query ($where: UserWhereUniqueInput!) {
           startDate
           endDate
         }
+        teamMembers
         createdAt
       }
     }
@@ -74,7 +77,7 @@ const Profile = ({user}) => {
 
     const [modal, setModal] = useState(false);
 
-    const toggle = () => setModal(!modal);
+
 
     
 
@@ -98,6 +101,13 @@ const Profile = ({user}) => {
             }
           },
       });
+
+      const toggle = () => {
+        setModal(!modal);
+        if(!modal){
+            refetch();
+        }
+    };
 
       const handleUnregister = async (id) => {
         deleteEventRegistration(id).then((res) => {
@@ -219,12 +229,24 @@ const Profile = ({user}) => {
                     <div class="card-body text-center">
                     
 
-<Image
+{
+    data.user.profilePath ?
+    <Image
+                      class="rounded-circle img-fluid"
+                    src={data.user.profilePath}
+                    width={100}
+                    height={100}
+                  />
+ :
+ <Image
                       class="rounded-circle img-fluid"
                     src={profileImg}
                     width={100}
                     height={100}
                   />
+}
+
+                  <UploadProfileButton user_id={data.user.id} onUpdate={refetch}/>
 
                         <h5 class="my-3">{data.user.firstName} {data.user.lastName}</h5>
                         <Badge color="info">
@@ -325,8 +347,8 @@ const Profile = ({user}) => {
                                     <th scope="col">#</th>
                                     <th scope="col">Name</th>
                                     <th scope="col">Start Date</th>
-                                    <th scope="col">End Date</th>
                                     <th scope="col">Registered Date</th>
+                                    <th scope="col">Team Members</th>
                                     <th scope="col">Action</th>
                                     </tr>
                                 </thead>
@@ -339,13 +361,14 @@ const Profile = ({user}) => {
                                                     <th scope="row">{index + 1}</th>
                                                     <td>{reg.event.title}</td>
                                                     <td>
-                                                    <Moment format="DD/MM/YYYY H:m a" >{reg.event.startDate}</Moment>
+                                                    <Moment format="DD/MM/YYYY h:mm a" >{reg.event.startDate}</Moment>
+                                                    </td>
+                                                 
+                                                    <td>
+                                                    <Moment format="DD/MM/YYYY h:mm a" >{reg.createdAt}</Moment>
                                                     </td>
                                                     <td>
-                                                    <Moment format="DD/MM/YYYY H:m a" >{reg.event.endDate}</Moment>
-                                                    </td>
-                                                    <td>
-                                                    <Moment format="DD/MM/YYYY H:m a" >{reg.createdAt}</Moment>
+                                                        {reg.teamMembers}
                                                     </td>
                                                     <td>
                                                         <button className="btn btn-danger btn-sm" onClick={() => handleUnregister(reg.id)}>Unregister</button>
@@ -373,7 +396,7 @@ const Profile = ({user}) => {
             </div>
 
 
-            <Modal isOpen={modal} toggle={toggle} >
+            <Modal isOpen={modal} toggle={toggle} onExit={refetch}>
                 <ModalHeader toggle={toggle}>Create Event</ModalHeader>
                 <ModalBody>
                 <CreateEvent user={data.user} />

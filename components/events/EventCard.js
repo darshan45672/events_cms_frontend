@@ -33,7 +33,7 @@ return (
                       {props.event.title}
                       </h5>
                       <p className="m-b-0 font-14">
-                        Start Date - <Moment format="DD/MM/YYYY H:m a" >{props.event.startDate}</Moment></p>
+                        Start Date - <Moment format="DD/MM/YYYY h:mm a" >{props.event.startDate}</Moment></p>
                     </CardBody>
                   </Card>
                 
