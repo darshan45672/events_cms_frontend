@@ -12,9 +12,12 @@ import { useRouter } from 'next/router'
 
 
 import { useAlert } from 'react-alert'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const SignIn = () => {
   const alert = useAlert()
+  const router = useRouter()
   
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
@@ -38,23 +41,36 @@ const SignIn = () => {
     const result = await signIn("credentials", {
       username: email,
       password: password,
-      redirect: true,
+      redirect: false,
       // callbackUrl: "http://localhost:3006/",
-      callbackUrl: `${window.location.origin}/login`,
-    }).then((res) => {
-      console.log(res);
-    }).catch((err) => {
-      alert(err);
-    });
+      // callbackUrl: `${window.location.origin}/login`,
+    }).then(({ ok, error }) => {
+      if (ok) {
+          router.push("/profile");
+      } else {
+          console.log(error)
+          toast.error("Invalid Username or Password", {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+            })
+      }
+  })
   }
 
 
   if (status == "authenticated") {
-    const router = useRouter()
+    
     router.push('/profile')
 }
   return (
     <div className='container mt-4'>
+              <ToastContainer />
       <div className='row mt-4'>
         <div className='col-md-3'></div>
         <div className='col-md-6'>
