@@ -4,7 +4,7 @@ import { useQuery, gql } from "@apollo/client";
 
 
 import { Row, Col, Container, Card, CardBody,Spinner, CardHeader,CardText,CardTitle,Button } from "reactstrap";
-
+import { Badge } from 'reactstrap';
 
 import Link from "next/dist/client/link";
 
@@ -14,12 +14,15 @@ const BRANCHES_QUERY = gql`
   branches{
     id
     name
+    img
+    associationName
     events{
       title
       startDate
       endDate
       venue
       id
+     
     }
   }
 }
@@ -71,9 +74,18 @@ const Branch = () => {
                         {branch.events.length}  Event(s)
                         </CardHeader>
                         <CardBody >
+                          
+                        {branch.img ? <Image src={branch.img} alt="wrapkit" 
+              height="160" width="140"/> : <Image src="https://static.vecteezy.com/system/resources/previews/005/720/408/original/crossed-image-icon-picture-not-available-delete-picture-symbol-free-vector.jpg"  height="160" width="140" alt="wrapkit" />}
+
                             <CardTitle tag="h5" className="text-white">
                             {branch.name}
                             </CardTitle>
+                            <div class="mb-2">
+                            {
+                              branch.associationName ? <Badge color="primary" pill>{branch.associationName}</Badge> : null
+                            }
+                           </div>
                             <Link href={ `/branch/${branch.id}`} >
                             <Button color="primary">
                            View Events

@@ -69,6 +69,7 @@ const Registration = () => {
   const [password, setPassword] = useState("");
   const [usn, setUsn] = useState("");
   const [branch, setBranch] = useState("");
+  const [gender, setGender] = useState("");
   const [passwordAgain, setPasswordAgain] = useState("")
 
   const [isCapctcha, setIsCaptchaValidated] = useState(false)
@@ -96,9 +97,9 @@ const Registration = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    console.log(username, password, firstName, lastName, email, usn, branch, passwordAgain);
+    console.log(username, password, firstName, lastName, email, usn, branch, passwordAgain,gender);
 
-    if (!username || !password || !firstName || !lastName || !email || !usn || !branch || !passwordAgain) {
+    if (!username || !password || !firstName || !lastName || !email || !usn || !branch || !passwordAgain || !gender) {
            
       toast.error("Enter all fields", {
           position: "bottom-right",
@@ -126,21 +127,7 @@ const Registration = () => {
         })
         return;
     }
-    const form = 
-    {  
-      username: username,
-      password: password,
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      gender: ["Male"],
-      eventRegistrations: {connect: [{id: "6446549a360a053211397dda"}]},
-      usn: usn,
-      // branch: {
-      //   id: branch
-      // },
-      roles: ["user", "superAdmin"],
-    }
+
     try {
       const { data } = await createUser({
         variables: {
@@ -149,18 +136,15 @@ const Registration = () => {
                     id: branch
                 },
                 "firstName": firstName,
-                "gender": [
-                  "Male"
-                ],
+                "gender": [gender],
                 "lastName": lastName,
                 "password": password,
                 "roles": [
-                  "user",
-                  "superAdmin"
+                  "user"
                 ],
                 "username": username,
                 "usn": usn,
-                "email": email,
+                "email": email
           },
         },
       });
@@ -279,6 +263,17 @@ const Registration = () => {
               <option value={branch.id}>{branch.name}</option>
             ))
           }
+          </Input>
+      </div>
+    </div>
+    <div className="row">
+      <div class="col-md-6 form-outline mb-4">
+      <label class="form-label" for="form2Example1">Select Gender</label>
+    
+      <Input required type="select" name="select" id="exampleSelect" onChange={(e) => setGender(e.target.value)}>
+      <option value="">Please select</option>
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
           </Input>
       </div>
     </div>
