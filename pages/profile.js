@@ -35,6 +35,8 @@ import BranchEventTable from "../components/events/BranchEventTable";
 
 import UploadProfileButton from '../components/profile/UploadProfileButton'
 
+import EditProfile from "../components/profile/EditProfile";
+
 const USER_QUERY = gql`
 query ($where: UserWhereUniqueInput!) {
     user(where:$where) {
@@ -79,8 +81,7 @@ const Profile = ({user}) => {
 
 
 
-    
-
+  
  
     if (!user) {
         return (<div className="container">
@@ -383,7 +384,9 @@ const Profile = ({user}) => {
                             </table>
                     </Tab>
                     }
-                    
+                       <Tab label="Edit Profile">
+                          <EditProfile user={data.user} onUpdate={refetch} />
+                    </Tab>
                 </Tabs>
                     
                       
