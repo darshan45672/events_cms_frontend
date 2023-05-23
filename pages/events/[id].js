@@ -7,7 +7,7 @@ import {fetchSingleEvent} from '../../pages/api/api'
 
 import React, { useEffect, useState} from "react";
 
-
+import Link from 'next/link'
 import Moment from 'react-moment';
 
 import { Row, Col, Container, Card, CardBody, Spinner, Button, Badge, Modal, ModalHeader, ModalBody, ModalFooter,FormGroup,Label,Input } from "reactstrap";
@@ -191,6 +191,11 @@ if (error)
     );
 
 
+
+    
+    if (status != "authenticated") {
+        router.push('/login')
+      }
 
         
 function getRegDetails(){
