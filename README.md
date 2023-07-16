@@ -26,12 +26,8 @@ To get started with the Events CMS, follow these steps:
 1. Clone the repository: `git clone https://github.com/your-username/events-cms.git`
 2. Navigate to the project directory: `cd events-cms`
 3. Install the dependencies:
-   - Backend:
-     - Navigate to the backend directory: `cd backend`
-     - Run `npm install` to install the backend dependencies
-   - Frontend:
-     - Navigate to the frontend directory: `cd frontend`
-     - Run `npm install` to install the frontend dependencies
+     - Run `npm install`
+     - backend code `https://github.com/klientship/events_cms_backend`
 4. Configure the environment variables:
    - Create a `.env` file in the `backend` directory and define the following variables:
      ```
